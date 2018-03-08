@@ -1,0 +1,16 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Outputs the time
+Resources:
+  DefaultFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: main.handle
+      Runtime: python3.6
+      CodeUri: ./
+      Events:
+        DefaultApi:
+          Type: Api
+          Properties:
+            Path: /index
+            Method: GET
