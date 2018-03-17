@@ -1,6 +1,6 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Outputs the time
+Description: Handle wallet operations
 Resources:
   DefaultFunction:
     Type: AWS::Serverless::Function
@@ -14,7 +14,7 @@ Resources:
           Properties:
             RestApiId: !Ref ApiGatewayApi
             Path: /
-            Method: ANY
+            Method: GET
   ApiGatewayApi:
     Type: AWS::Serverless::Api
     Properties:
