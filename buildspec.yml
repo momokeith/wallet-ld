@@ -8,3 +8,4 @@ artifacts:
   type: zip
   files:
     - NewSamTemplate.yaml
+    - swagger.yaml
