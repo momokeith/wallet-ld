@@ -1,0 +1,34 @@
+---
+swagger: "2.0"
+info:
+  version: "2016-12-20T18:27:47Z"
+  title: "wallet-apigateway"
+basePath: "/Prod"
+schemes:
+ - "https"
+paths:
+  /:
+    get:
+      consumes:
+       - "application/json"
+      produces:
+       - "application/json"
+      responses:
+        "200":
+          description: "200 response"
+          headers:
+            Content-Type:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json: "#set($inputRoot = $input.path('$')){\"wallet_id\":\"$inputRoot.uuid\"}"
+            responseParameters:
+              method.response.header.Content-Type: "'application/json'"
+        requestTemplates: ~
+        passthroughBehavior: "when_no_templates"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws"

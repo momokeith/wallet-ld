@@ -12,5 +12,11 @@ Resources:
         DefaultApi:
           Type: Api
           Properties:
-            Path: /index
-            Method: GET
+            RestApiId: !Ref ApiGatewayApi
+            Path: /
+            Method: ANY
+  ApiGatewayApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      DefinitionUri: swagger.yaml
+      StageName: Prod

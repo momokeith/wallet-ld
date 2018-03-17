@@ -1,6 +1,16 @@
+from wallet import WalletEntity
+import json
+
 def handle(event, context):
+
+    wallet = WalletEntity
+
+    payload = {
+        "uuid" : str(wallet.uuid)
+    }
+
     return {
         "statusCode": 200,
         "headers": {"Content-Type": "application/json"},
-        "body": '{"id":1,"balance":123, "currency":"EUR"}'
+        "body": json.JSONEncoder().encode(payload)
     }
