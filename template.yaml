@@ -34,4 +34,5 @@ Resources:
       DefinitionUri: swagger.yaml
       StageName: v1
       Variables:
+        ListFunctionName: !Ref ListFunction
         CreateFunctionName: !Ref CreateFunction

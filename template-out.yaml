@@ -8,10 +8,12 @@ Resources:
       Variables:
         CreateFunctionName:
           Ref: CreateFunction
+        ListFunctionName:
+          Ref: ListFunction
     Type: AWS::Serverless::Api
   CreateFunction:
     Properties:
-      CodeUri: s3://wallet.lambda/c357fd0aed8ef069fda27040e10d5334
+      CodeUri: s3://wallet.lambda/ba386b470e33e22beb7f6c94678f091e
       Events:
         DefaultApi:
           Properties:
@@ -25,7 +27,7 @@ Resources:
     Type: AWS::Serverless::Function
   ListFunction:
     Properties:
-      CodeUri: s3://wallet.lambda/c357fd0aed8ef069fda27040e10d5334
+      CodeUri: s3://wallet.lambda/ba386b470e33e22beb7f6c94678f091e
       Events:
         DefaultApi:
           Properties:
