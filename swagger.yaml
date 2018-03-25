@@ -2,13 +2,11 @@
 swagger: "2.0"
 info:
   version: "2016-12-20T18:27:47Z"
-  title: "wallet-apigateway"
-basePath: "/Prod"
+  title: "wallet-ms"
 schemes:
  - "https"
- - "http"
 paths:
-  /v1/wallet:
+  /wallet:
     get:
       consumes:
        - "application/json"
@@ -28,7 +26,31 @@ paths:
               application/json: "$input.path('$.body')"
             responseParameters:
               method.response.header.Content-Type: "'application/json'"
-        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:279633869671:function:wallet-DefaultFunction-GK7PZ8CEBCPV/invocations
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:279633869671:function:${stageVariables.ListFunctionName}/invocations
+        passthroughBehavior: "when_no_templates"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws"
+    post:
+      consumes:
+       - "application/json"
+      produces:
+       - "application/json"
+      responses:
+        "200":
+          description: "200 response"
+          headers:
+            Content-Type:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "200"
+            responseTemplates:
+              application/json: "$input.path('$.body')"
+            responseParameters:
+              method.response.header.Content-Type: "'application/json'"
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:279633869671:function:${stageVariables.CreateFunctionName}/invocations
         passthroughBehavior: "when_no_templates"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"

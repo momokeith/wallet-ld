@@ -1,7 +1,7 @@
 from wallet import WalletEntity
 import json
 
-def handle(event, context):
+def list(event, context):
 
     wallet = WalletEntity
 
@@ -13,4 +13,11 @@ def handle(event, context):
         "statusCode": 200,
         "headers": {"Content-Type": "application/json"},
         "body": json.JSONEncoder().encode(payload)
+    }
+
+def create(event, context):
+    return {
+        "statusCode": 200,
+        "headers": {"Content-Type": "application/json"},
+        "body": json.JSONEncoder().encode({ "Created" : 1})
     }

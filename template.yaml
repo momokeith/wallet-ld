@@ -2,10 +2,10 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Handle wallet operations
 Resources:
-  DefaultFunction:
+  ListFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: main.handle
+      Handler: main.list
       Runtime: python3.6
       CodeUri: ./
       Events:
@@ -13,10 +13,25 @@ Resources:
           Type: Api
           Properties:
             RestApiId: !Ref ApiGatewayApi
-            Path: /v1/wallet
+            Path: /wallet
             Method: GET
+  CreateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: main.create
+      Runtime: python3.6
+      CodeUri: ./
+      Events:
+        DefaultApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /wallet
+            Method: POST
   ApiGatewayApi:
     Type: AWS::Serverless::Api
     Properties:
       DefinitionUri: swagger.yaml
-      StageName: Prod
+      StageName: v1
+      Variables:
+        CreateFunctionName: !Ref CreateFunction

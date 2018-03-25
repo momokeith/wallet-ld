@@ -3,21 +3,38 @@ Description: Handle wallet operations
 Resources:
   ApiGatewayApi:
     Properties:
-      DefinitionUri: s3://wallet.lambda/449bdd20fd1b15c0d1e18af054897287
-      StageName: Prod
+      DefinitionUri: s3://wallet.lambda/d878f0009ff46b6963868c5f5dca5880
+      StageName: v1
+      Variables:
+        CreateFunctionName:
+          Ref: CreateFunction
     Type: AWS::Serverless::Api
-  DefaultFunction:
+  CreateFunction:
     Properties:
-      CodeUri: s3://wallet.lambda/6f5d4b7c86fa2ac9b191b48bbc2656a4
+      CodeUri: s3://wallet.lambda/c357fd0aed8ef069fda27040e10d5334
+      Events:
+        DefaultApi:
+          Properties:
+            Method: POST
+            Path: /wallet
+            RestApiId:
+              Ref: ApiGatewayApi
+          Type: Api
+      Handler: main.create
+      Runtime: python3.6
+    Type: AWS::Serverless::Function
+  ListFunction:
+    Properties:
+      CodeUri: s3://wallet.lambda/c357fd0aed8ef069fda27040e10d5334
       Events:
         DefaultApi:
           Properties:
             Method: GET
-            Path: /v1/wallet
+            Path: /wallet
             RestApiId:
               Ref: ApiGatewayApi
           Type: Api
-      Handler: main.handle
+      Handler: main.list
       Runtime: python3.6
     Type: AWS::Serverless::Function
 Transform: AWS::Serverless-2016-10-31
