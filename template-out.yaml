@@ -1,0 +1,23 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Handle wallet operations
+Resources:
+  ApiGatewayApi:
+    Properties:
+      DefinitionUri: s3://wallet.lambda/449bdd20fd1b15c0d1e18af054897287
+      StageName: Prod
+    Type: AWS::Serverless::Api
+  DefaultFunction:
+    Properties:
+      CodeUri: s3://wallet.lambda/6f5d4b7c86fa2ac9b191b48bbc2656a4
+      Events:
+        DefaultApi:
+          Properties:
+            Method: GET
+            Path: /v1/wallet
+            RestApiId:
+              Ref: ApiGatewayApi
+          Type: Api
+      Handler: main.handle
+      Runtime: python3.6
+    Type: AWS::Serverless::Function
+Transform: AWS::Serverless-2016-10-31

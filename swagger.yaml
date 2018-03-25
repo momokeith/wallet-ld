@@ -6,8 +6,9 @@ info:
 basePath: "/Prod"
 schemes:
  - "https"
+ - "http"
 paths:
-  /:
+  /v1/wallet:
     get:
       consumes:
        - "application/json"
@@ -24,10 +25,10 @@ paths:
           default:
             statusCode: "200"
             responseTemplates:
-              application/json: "#set($inputRoot = $input.path('$')){\"wallet_id\":\"$inputRoot.uuid\"}"
+              application/json: "$input.path('$.body')"
             responseParameters:
               method.response.header.Content-Type: "'application/json'"
-        requestTemplates: ~
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:279633869671:function:wallet-DefaultFunction-GK7PZ8CEBCPV/invocations
         passthroughBehavior: "when_no_templates"
         httpMethod: "POST"
         contentHandling: "CONVERT_TO_TEXT"
