@@ -1,3 +1,8 @@
+# Install project requirements
+
+```
+pip install -r requirements.txt -t .
+```
 
 # Launch development envrionment
 

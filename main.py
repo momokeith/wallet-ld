@@ -1,23 +1,29 @@
-from wallet import WalletEntity
+from wallet.entity.wallet_entity import WalletEntity
 import json
+from wallet.service.wallet_service import WalletService
+import pickle
+
+wallet_service = WalletService()
 
 def list(event, context):
 
-    wallet = WalletEntity
-
-    payload = {
-        "uuid" : str(wallet.uuid)
-    }
+    wallets = wallet_service.list()
 
     return {
         "statusCode": 200,
         "headers": {"Content-Type": "application/json"},
-        "body": json.JSONEncoder().encode(payload)
+        "body": pickle.dumps(WalletEntity())
     }
 
 def create(event, context):
+
+    wallet = WalletEntity()
+    response = wallet_service.create(wallet)
+
+    print(response)
+
     return {
         "statusCode": 200,
         "headers": {"Content-Type": "application/json"},
-        "body": json.JSONEncoder().encode({ "Created" : 1})
+        "body": json.JSONEncoder().encode({ "Created" : response})
     }
