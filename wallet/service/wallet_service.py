@@ -11,7 +11,8 @@ class WalletService:
         self._engine = create_engine('mysql+pymysql://naman2kmn:M0mo1986@db1.csx6zvsxgs36.eu-west-1.rds.amazonaws.com:3306/wallet')
         self._session = orm.Session(bind=self._engine)
         wallet = Table('wallet', MetaData(),
-                       Column('uuid', String, primary_key=True)
+                       Column('uuid', String, primary_key=True),
+                       Column('user_id')
                        )
         mapper(WalletEntity, wallet)
 
@@ -20,5 +21,6 @@ class WalletService:
 
     def create(self, wallet_entity):
         self._session.add(wallet_entity)
-        return self._session.commit()
+        self._session.commit()
+        return wallet_entity
 

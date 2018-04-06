@@ -1,7 +1,7 @@
 from wallet.entity.wallet_entity import WalletEntity
-import json
+from wallet.entity.wallet_entity import JsonEncoder
 from wallet.service.wallet_service import WalletService
-import pickle
+import json
 
 wallet_service = WalletService()
 
@@ -12,18 +12,18 @@ def list(event, context):
     return {
         "statusCode": 200,
         "headers": {"Content-Type": "application/json"},
-        "body": pickle.dumps(WalletEntity())
+        "body": json.dumps(wallets,cls=JsonEncoder)
     }
+
 
 def create(event, context):
 
-    wallet = WalletEntity()
-    response = wallet_service.create(wallet)
-
-    print(response)
+    request_body = json.JSONDecoder().decode(event['body'])
+    wallet = WalletEntity(request_body['user_id'])
+    wallet = wallet_service.create(wallet)
 
     return {
-        "statusCode": 200,
+        "statusCode": 201,
         "headers": {"Content-Type": "application/json"},
-        "body": json.JSONEncoder().encode({ "Created" : response})
+            "body": json.dumps(wallet,cls=JsonEncoder)
     }
