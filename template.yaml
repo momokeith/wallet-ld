@@ -36,15 +36,3 @@ Resources:
       Variables:
         ListFunctionName: !Ref ListFunction
         CreateFunctionName: !Ref CreateFunction
-
-#  Database:
-#    Type: AWS::RDS::DBInstance
-#    Properties:
-#      DBSecurityGroups:
-#      - Ref: sg-1825567f
-#      AllocatedStorage: '5'
-#      DBInstanceClass: db.m1.micro
-#      Engine: MySQL
-#      MasterUsername: MyName
-#      MasterUserPassword: MyPassword
-#    DeletionPolicy: Snapshot

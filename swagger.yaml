@@ -37,15 +37,15 @@ paths:
       produces:
        - "application/json"
       responses:
-        "200":
-          description: "200 response"
+        "201":
+          description: "201 response"
           headers:
             Content-Type:
               type: "string"
       x-amazon-apigateway-integration:
         responses:
           default:
-            statusCode: "200"
+            statusCode: "201"
             responseTemplates:
               application/json: "$input.path('$.body')"
             responseParameters:

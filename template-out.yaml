@@ -13,7 +13,7 @@ Resources:
     Type: AWS::Serverless::Api
   CreateFunction:
     Properties:
-      CodeUri: s3://wallet.lambda/ba386b470e33e22beb7f6c94678f091e
+      CodeUri: s3://wallet.lambda/c00e310393ca4e5b4048760136d05869
       Events:
         DefaultApi:
           Properties:
@@ -27,7 +27,7 @@ Resources:
     Type: AWS::Serverless::Function
   ListFunction:
     Properties:
-      CodeUri: s3://wallet.lambda/ba386b470e33e22beb7f6c94678f091e
+      CodeUri: s3://wallet.lambda/c00e310393ca4e5b4048760136d05869
       Events:
         DefaultApi:
           Properties:
