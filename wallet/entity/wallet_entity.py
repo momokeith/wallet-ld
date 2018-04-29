@@ -3,8 +3,8 @@ import json
 
 class WalletEntity(object):
 
-    def __init__(self, user_id):
-        self.uuid = str(uuid.uuid4())
+    def __init__(self, user_id = None , uuid = str(uuid.uuid4()) ):
+        self.uuid = uuid
         self.user_id = user_id
 
 

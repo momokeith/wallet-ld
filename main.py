@@ -27,3 +27,23 @@ def create(event, context):
         "headers": {"Content-Type": "application/json"},
         "body": json.dumps(wallet,cls=JsonEncoder)
     }
+
+def delete(event, context):
+    try:
+        wallet = wallet_service.delete(event['pathParameters']['uuid'])
+        return {
+            "statusCode": 202,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps(wallet, cls=JsonEncoder)
+        }
+    except Exception as e:
+        return {
+            "statusCode": 404,
+            "headers": {"Content-Type": "application/json"},
+            "body": json.dumps({
+                "message": "{0}".format(e)
+
+            })
+        }
+
+
