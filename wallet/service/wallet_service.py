@@ -25,3 +25,12 @@ class WalletService:
         self._session.commit()
         return wallet_entity
 
+    def delete(self, uuid):
+        wallet_entity = self._session.query(WalletEntity).get(uuid)
+        if(wallet_entity == None):
+            raise Exception("No wallet found for %s " % (uuid))
+        self._session.delete(wallet_entity)
+        self._session.commit()
+        return wallet_entity
+
+

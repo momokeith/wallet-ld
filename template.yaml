@@ -41,6 +41,19 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
             Path: /wallet
             Method: POST
+  DeleteFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: main.delete
+      Runtime: python3.6
+      CodeUri: ./
+      Events:
+        DefaultApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /wallet/{uuid}
+            Method: DELETE
   ApiGatewayApi:
     Type: AWS::Serverless::Api
     Properties:
@@ -49,6 +62,8 @@ Resources:
       Variables:
         ListFunctionName: !Ref ListFunction
         CreateFunctionName: !Ref CreateFunction
+        DeleteFunction: !Ref DeleteFunction
+
   WalletDB:
     Type: AWS::RDS::DBInstance
     Properties:
