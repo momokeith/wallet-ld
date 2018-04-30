@@ -1,9 +1,16 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Description: Handle wallet operations
+Parameters:
+  DBMasterPassword:
+    Default: WalletDBMasterPassword
+    Type: AWS::SSM::Parameter::Value<String>
+  DBMasterUserName:
+    Default: WalletDBMasterUserName
+    Type: AWS::SSM::Parameter::Value<String>
 Resources:
   ApiGatewayApi:
     Properties:
-      DefinitionUri: s3://wallet.lambda/d878f0009ff46b6963868c5f5dca5880
+      DefinitionUri: s3://wallet.lambda/67da688887800ada57f50bcee7a387c8
       StageName: v1
       Variables:
         CreateFunctionName:
@@ -13,7 +20,7 @@ Resources:
     Type: AWS::Serverless::Api
   CreateFunction:
     Properties:
-      CodeUri: s3://wallet.lambda/c00e310393ca4e5b4048760136d05869
+      CodeUri: s3://wallet.lambda/4f6a000d54ca50bdfc651dad2f74b8f9
       Events:
         DefaultApi:
           Properties:
@@ -25,9 +32,29 @@ Resources:
       Handler: main.create
       Runtime: python3.6
     Type: AWS::Serverless::Function
+  DbSecurityByEC2SecurityGroup:
+    Properties:
+      DBSecurityGroupIngress:
+      - EC2SecurityGroupId: sg-1825567f
+      GroupDescription: Ingress for Amazon EC2 security group
+    Type: AWS::RDS::DBSecurityGroup
   ListFunction:
     Properties:
-      CodeUri: s3://wallet.lambda/c00e310393ca4e5b4048760136d05869
+      CodeUri: s3://wallet.lambda/4f6a000d54ca50bdfc651dad2f74b8f9
+      Environment:
+        Variables:
+          DB_ENDPOINT_ADDRESS:
+            Fn::GetAtt:
+            - WalletDB
+            - Endpoint.Address
+          DB_PASSWORD:
+            Ref: DBMasterPassword
+          DB_PORT:
+            Fn::GetAtt:
+            - WalletDB
+            - Endpoint.Port
+          DB_USERNAME:
+            Ref: DBMasterUserName
       Events:
         DefaultApi:
           Properties:
@@ -39,4 +66,18 @@ Resources:
       Handler: main.list
       Runtime: python3.6
     Type: AWS::Serverless::Function
+  WalletDB:
+    DeletionPolicy: Snapshot
+    Properties:
+      AllocatedStorage: '5'
+      DBInstanceClass: db.t2.micro
+      DBName: wallet
+      DBSecurityGroups:
+      - Ref: DbSecurityByEC2SecurityGroup
+      Engine: MySQL
+      MasterUserPassword:
+        Ref: DBMasterPassword
+      MasterUsername:
+        Ref: DBMasterUserName
+    Type: AWS::RDS::DBInstance
 Transform: AWS::Serverless-2016-10-31

@@ -1,6 +1,13 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Handle wallet operations
+Parameters:
+  DBMasterUserName :
+    Type : 'AWS::SSM::Parameter::Value<String>'
+    Default: WalletDBMasterUserName
+  DBMasterPassword :
+    Type : 'AWS::SSM::Parameter::Value<String>'
+    Default: WalletDBMasterPassword
 Resources:
   ListFunction:
     Type: AWS::Serverless::Function
@@ -8,6 +15,12 @@ Resources:
       Handler: main.list
       Runtime: python3.6
       CodeUri: ./
+      Environment:
+        Variables:
+          DB_ENDPOINT_ADDRESS: !GetAtt WalletDB.Endpoint.Address
+          DB_PORT: !GetAtt WalletDB.Endpoint.Port
+          DB_USERNAME: !Ref DBMasterUserName
+          DB_PASSWORD: !Ref DBMasterPassword
       Events:
         DefaultApi:
           Type: Api
@@ -36,3 +49,22 @@ Resources:
       Variables:
         ListFunctionName: !Ref ListFunction
         CreateFunctionName: !Ref CreateFunction
+  WalletDB:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      DBName: wallet
+      DBSecurityGroups:
+      - !Ref DbSecurityByEC2SecurityGroup
+      AllocatedStorage: '5'
+      DBInstanceClass: db.t2.micro
+      Engine: MySQL
+      MasterUsername: !Ref DBMasterUserName
+      MasterUserPassword: !Ref DBMasterPassword
+    DeletionPolicy: Snapshot
+
+  DbSecurityByEC2SecurityGroup:
+    Type: "AWS::RDS::DBSecurityGroup"
+    Properties:
+      GroupDescription: "Ingress for Amazon EC2 security group"
+      DBSecurityGroupIngress:
+        - EC2SecurityGroupId: "sg-1825567f"
