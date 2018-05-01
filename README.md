@@ -7,7 +7,7 @@ pip install -r requirements.txt -t .
 # Launch development envrionment
 
 ```
-sam local start-api
+sam local start-api --env-vars configuration.json
 ```
 
 # Go to http://127.0.0.1:3000/index

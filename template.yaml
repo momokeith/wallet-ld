@@ -2,10 +2,13 @@ AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
 Description: Handle wallet operations
 Parameters:
-  DBMasterUserName :
+  DBName:
+    Type : 'AWS::SSM::Parameter::Value<String>'
+    Default: WalletDBName
+  DBMasterUserName:
     Type : 'AWS::SSM::Parameter::Value<String>'
     Default: WalletDBMasterUserName
-  DBMasterPassword :
+  DBMasterPassword:
     Type : 'AWS::SSM::Parameter::Value<String>'
     Default: WalletDBMasterPassword
 Resources:
@@ -19,6 +22,7 @@ Resources:
         Variables:
           DB_ENDPOINT_ADDRESS: !GetAtt WalletDB.Endpoint.Address
           DB_PORT: !GetAtt WalletDB.Endpoint.Port
+          DB_NAME: !Ref WalletDBName
           DB_USERNAME: !Ref DBMasterUserName
           DB_PASSWORD: !Ref DBMasterPassword
       Events:
@@ -34,6 +38,13 @@ Resources:
       Handler: main.create
       Runtime: python3.6
       CodeUri: ./
+      Environment:
+        Variables:
+          DB_ENDPOINT_ADDRESS: !GetAtt WalletDB.Endpoint.Address
+          DB_PORT: !GetAtt WalletDB.Endpoint.Port
+          DB_NAME: !Ref WalletDBName
+          DB_USERNAME: !Ref DBMasterUserName
+          DB_PASSWORD: !Ref DBMasterPassword
       Events:
         DefaultApi:
           Type: Api
@@ -47,6 +58,13 @@ Resources:
       Handler: main.delete
       Runtime: python3.6
       CodeUri: ./
+      Environment:
+        Variables:
+          DB_ENDPOINT_ADDRESS: !GetAtt WalletDB.Endpoint.Address
+          DB_PORT: !GetAtt WalletDB.Endpoint.Port
+          DB_NAME: !Ref WalletDBName
+          DB_USERNAME: !Ref DBMasterUserName
+          DB_PASSWORD: !Ref DBMasterPassword
       Events:
         DefaultApi:
           Type: Api
@@ -67,7 +85,7 @@ Resources:
   WalletDB:
     Type: AWS::RDS::DBInstance
     Properties:
-      DBName: wallet
+      DBName: !Ref DBName
       DBSecurityGroups:
       - !Ref DbSecurityByEC2SecurityGroup
       AllocatedStorage: '5'

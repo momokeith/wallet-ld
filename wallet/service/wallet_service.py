@@ -9,7 +9,7 @@ import os
 class WalletService:
 
     def __init__(self):
-        self._engine = create_engine('mysql+pymysql://%s:%s@%s/wallet' %(os.environ['DB_USERNAME'],os.environ['DB_PASSWORD'],os.environ['DB_ENDPOINT_ADDRESS']))
+        self._engine = create_engine('mysql+pymysql://%s:%s@%s/%s' %(os.environ['DB_USERNAME'],os.environ['DB_PASSWORD'],os.environ['DB_ENDPOINT_ADDRESS'],os.environ['DB_NAME']))
         self._session = orm.Session(bind=self._engine)
         wallet = Table('wallet', MetaData(),
                        Column('uuid', String, primary_key=True),
