@@ -80,7 +80,29 @@ paths:
         httpMethod: "DELETE"
         contentHandling: "CONVERT_TO_TEXT"
         type: "aws"
-
-
-
+  /wallet/db/schema:
+    post:
+      consumes:
+        - "application/json"
+      produces:
+        - "application/json"
+      responses:
+        "201":
+          description: "201 response"
+          headers:
+            Content-Type:
+              type: "string"
+      x-amazon-apigateway-integration:
+        responses:
+          default:
+            statusCode: "202"
+            responseTemplates:
+              application/json: "$input.path('$.body')"
+            responseParameters:
+              method.response.header.Content-Type: "'application/json'"
+        uri: arn:aws:apigateway:eu-west-1:lambda:path/2015-03-31/functions/arn:aws:lambda:eu-west-1:279633869671:function:${stageVariables.DBMigrationFunction}/invocations
+        passthroughBehavior: "when_no_templates"
+        httpMethod: "POST"
+        contentHandling: "CONVERT_TO_TEXT"
+        type: "aws"
 

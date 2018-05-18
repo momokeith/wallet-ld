@@ -22,7 +22,7 @@ Resources:
         Variables:
           DB_ENDPOINT_ADDRESS: !GetAtt WalletDB.Endpoint.Address
           DB_PORT: !GetAtt WalletDB.Endpoint.Port
-          DB_NAME: !Ref WalletDBName
+          DB_NAME: !Ref DBName
           DB_USERNAME: !Ref DBMasterUserName
           DB_PASSWORD: !Ref DBMasterPassword
       Events:
@@ -42,7 +42,7 @@ Resources:
         Variables:
           DB_ENDPOINT_ADDRESS: !GetAtt WalletDB.Endpoint.Address
           DB_PORT: !GetAtt WalletDB.Endpoint.Port
-          DB_NAME: !Ref WalletDBName
+          DB_NAME: !Ref DBName
           DB_USERNAME: !Ref DBMasterUserName
           DB_PASSWORD: !Ref DBMasterPassword
       Events:
@@ -62,7 +62,7 @@ Resources:
         Variables:
           DB_ENDPOINT_ADDRESS: !GetAtt WalletDB.Endpoint.Address
           DB_PORT: !GetAtt WalletDB.Endpoint.Port
-          DB_NAME: !Ref WalletDBName
+          DB_NAME: !Ref DBName
           DB_USERNAME: !Ref DBMasterUserName
           DB_PASSWORD: !Ref DBMasterPassword
       Events:
@@ -72,6 +72,26 @@ Resources:
             RestApiId: !Ref ApiGatewayApi
             Path: /wallet/{uuid}
             Method: DELETE
+  DBMigrationFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: main.migrate
+      Runtime: python3.6
+      CodeUri: ./
+      Environment:
+        Variables:
+          DB_ENDPOINT_ADDRESS: !GetAtt WalletDB.Endpoint.Address
+          DB_PORT: !GetAtt WalletDB.Endpoint.Port
+          DB_NAME: !Ref DBName
+          DB_USERNAME: !Ref DBMasterUserName
+          DB_PASSWORD: !Ref DBMasterPassword
+      Events:
+        DefaultApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref ApiGatewayApi
+            Path: /wallet/db/schema
+            Method: POST
   ApiGatewayApi:
     Type: AWS::Serverless::Api
     Properties:
@@ -81,6 +101,7 @@ Resources:
         ListFunctionName: !Ref ListFunction
         CreateFunctionName: !Ref CreateFunction
         DeleteFunction: !Ref DeleteFunction
+        DBMigrationFunction: !Ref DBMigrationFunction
 
   WalletDB:
     Type: AWS::RDS::DBInstance
@@ -100,4 +121,4 @@ Resources:
     Properties:
       GroupDescription: "Ingress for Amazon EC2 security group"
       DBSecurityGroupIngress:
-        - EC2SecurityGroupId: "sg-1825567f"
+        - CIDRIP: "0.0.0.0/0"

@@ -1,9 +1,9 @@
 {
   "Parameters": {
-    "DB_ENDPOINT_ADDRESS": "db1.csx6zvsxgs36.eu-west-1.rds.amazonaws.com",
+    "DB_ENDPOINT_ADDRESS": "ww63bbewj8wr20.csx6zvsxgs36.eu-west-1.rds.amazonaws.com",
     "DB_PORT": "3306",
     "DB_NAME": "wallet",
-    "DB_USERNAME": "naman2kmn",
-    "DB_PASSWORD": "M0mo1986"
+    "DB_USERNAME": "mkeita",
+    "DB_PASSWORD": "%:|Oaq'I4f$z"
   }
 }
